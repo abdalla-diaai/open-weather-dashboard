@@ -70,9 +70,19 @@ function processForm(city) {
 
                 createCard('forecast', new Date(data.list[i].dt_txt), forecastDiv);
             };
+  
+            // add city to history
+            if (!cityHistory.includes(city)) {
+                cityHistory.push(city);
+                var cityBtn = $('<button>');
+                cityBtn.addClass('city');
+                cityBtn.attr('data-name', city);
+                $('#history').prepend(cityBtn);
+                cityBtn.text(city);
+            };
         })
         .catch(error => {
-            console.log('Error:', error);
+            alert('Error: city name does not exist!');
         });
     $('#search-input').val('');
 };
@@ -87,16 +97,9 @@ $('#search-form').on('submit', function (event) {
     // handle empty form and city searched before
     if (city && !cityHistory.includes(city)) {
         processForm(city);
-        console.log(response.status);
-        var cityBtn = $('<button>');
-        cityBtn.addClass('city');
-        cityBtn.attr('data-name', city);
-        $('#history').prepend(cityBtn);
-        cityBtn.text(city);
-        // add city to history
-        if (!cityHistory.includes(city)) {
-            cityHistory.push(city);
-        };
+    }
+    else if (cityHistory.includes(city)) {
+        alert('City exists in search history!')
     }
     else {
         alert('This field can not be empty!');
