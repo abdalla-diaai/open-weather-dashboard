@@ -1,3 +1,20 @@
 button {
     max-width: 75%;
 }
+
+.card {
+    text-align: left;
+    margin-inline-end: 10px;
+}
+
+ul {
+    padding-inline-start: 0;
+}
+li {
+    list-style-type: none;
+}
+
+#forecast > .card {
+    width: 25%;
+    margin-inline-end: 5px;
+}
