@@ -51,7 +51,6 @@ function createCard(date, dateFormat, wDiv) {
 };
 
 function processForm(city) {
-    $('#history').prepend($('<button>').text(city));
     var queryUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&appid=ba14af29e70b969c97f97a7190344c26`
 
     fetch(queryUrl)
@@ -73,14 +72,26 @@ function processForm(city) {
                 
                 createCard('forecast', new Date(data.list[i].dt_txt), forecastDiv);
             }
+        
+        })
+        .catch(error => {
+            console.log('Error:', error);
         });
     $('#search-input').val('');
 };
 $('#search-form').on('submit', function (event) {
+    
     todayDiv.empty();
     forecastDiv.empty();
     event.preventDefault();
     city = $('#search-input').val();
     cityHistory.push(city);
-    processForm(city);
+    if (city) {
+        if (processForm(city)) {
+            $('#history').prepend($('<button>').text(city));
+        }
+    }
+    else {
+        alert('This field can not be empty!')
+    }
 });
