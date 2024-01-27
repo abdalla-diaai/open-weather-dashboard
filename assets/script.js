@@ -77,7 +77,7 @@ function createCard(date, dateFormat, wDiv, cityName) {
     if (date === 'today') {
         weatherDiv.attr('class', 'card');
         today = dateFormat;
-        displayText = `${cityName.charAt(0).toUpperCase() + cityName.slice(1)} ${today}`;
+        displayText = `${cityName.charAt(0).toUpperCase() + cityName.slice(1)} (${today})`;
     };
     if (date === 'forecast') {
         forecastDay = dateFormat;
