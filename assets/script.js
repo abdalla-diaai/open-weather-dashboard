@@ -18,7 +18,6 @@ var today;
 var forecastDay;
 
 // modal function to show warning messages
-
 function openModal() {
     var modal = $('#myModal');
     modal.style.display = "block";
