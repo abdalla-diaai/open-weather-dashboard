@@ -16,7 +16,6 @@ button {
 }
 
 #forecast-cards>.card {
-    width: 25%;
     margin-inline-end: 5px;
     background-color: antiquewhite;
 }
