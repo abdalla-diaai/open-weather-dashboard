@@ -17,15 +17,6 @@ var condition;
 var today;
 var forecastDay;
 
-// modal function to show warning messages
-function openModal() {
-    var modal = $('#myModal');
-    modal.style.display = "block";
-    $('.close-modal').on('click', function () {
-        modal.style.display = "none";
-    });
-    $('#search-input').val('');
-};
 
 
 // function to render history buttons
@@ -128,7 +119,6 @@ function processForm(city) {
             wind = data.list[0].wind.speed;
             humidity = data.list[0].main.humidity;
             condition = data.list[0].weather[0].main;
-            console.log(condition);
             createCard('today', dayjs().format('DD/MM/YYYY'), todayDiv, city);
 
             for (var i = 8; i < data.list.length; i += 8) {
@@ -151,14 +141,13 @@ function processForm(city) {
             };
         })
         .catch(error => {
-            $('#modal-text').text('City Does not Exist!');
-            $('.modal-title').text('Error');
-            openModal();
+            alert('City Does not Exist!');
         });
     // clear input field
     $('#search-input').val('');
 
 };
+
 // event listners -->
 // form event
 $('#search-form').on('submit', function (event) {
@@ -172,14 +161,9 @@ $('#search-form').on('submit', function (event) {
     if (city && !checkHistory(city)) {
         processForm(city);
     } else if (checkHistory(city)) {
-        $('.modal-title').text('Check History');
-
-        $('#modal-text').text('City Exists in History!');
-        openModal();
+        alert('City Exists in History!');
     } else {
-        $('.modal-title').text('Error');
-        $('#modal-text').text('Invalid Input!');
-        openModal();
+        alert('Invalid Input!');
     };
 });
 
