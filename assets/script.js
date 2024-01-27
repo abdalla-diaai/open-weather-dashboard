@@ -110,9 +110,9 @@ function createCard(date, dateFormat, wDiv, cityName) {
     weatherUl.append(humidityLi);
     weatherBody.append(weatherUl);
 
-    tempLi.text(`Temperature: ${temp}ºC`);
-    windLi.text(`Wind Speed: ${wind} mps`);
-    humidityLi.text(`Humidity: ${humidity}%`);
+    tempLi.text(`Temperature: ${temp}ºC.`);
+    windLi.text(`Wind Speed: ${wind} mps.`);
+    humidityLi.text(`Humidity: ${humidity}%.`);
 };
 
 // function to process form and fetch data
