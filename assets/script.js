@@ -1,6 +1,6 @@
 var todayDiv = $('#today');
 var forecastDiv = $('#forecast-cards');
-var weatherCondition = ['☀︎', '⛅︎', '☔︎']
+var weatherCondition = ['☀︎', '⛅︎', '☔︎', '❅']
 var temp;
 var wind;
 var humidity;
@@ -76,29 +76,23 @@ function createCard(date, dateFormat, wDiv, cityName) {
     if (date === 'today') {
         weatherDiv.attr('class', 'card');
         today = dateFormat;
-        displayText = `${cityName.charAt(0).toUpperCase() + cityName.slice(1)} ${today}`
-        if (condition === 'Clouds') {
-            weatherInfo.text(`${displayText} ${weatherCondition[1]}`);
-        } else if (condition === 'Rain') {
-            weatherInfo.text(`${displayText} ${weatherCondition[2]}`);
-        } else {
-            weatherInfo.text(`${displayText} ${weatherCondition[0]}`);
-        }
+        displayText = `${cityName.charAt(0).toUpperCase() + cityName.slice(1)} ${today}`;
     };
     if (date === 'forecast') {
         forecastDay = dateFormat;
         displayText = forecastDay.toLocaleDateString();
-        if (condition === 'Clouds') {
-            weatherInfo.text(`${displayText} ${weatherCondition[1]}`);
-        } else if (condition === 'Rain') {
-            weatherInfo.text(`${displayText} ${weatherCondition[2]}`);
-        } else {
-            weatherInfo.text(`${displayText} ${weatherCondition[0]}`);
-        }
         weatherDiv.attr('class', 'card col');
-       
-     
     };
+    if (condition === 'Sun') {
+        weatherInfo.text(`${displayText} ${weatherCondition[0]}`);
+
+    } else if (condition === 'Clouds') {
+        weatherInfo.text(`${displayText} ${weatherCondition[1]}`);
+    } else if (condition === 'Rain') {
+        weatherInfo.text(`${displayText} ${weatherCondition[2]}`);
+    } else {
+        weatherInfo.text(`${displayText} ${weatherCondition[3]}`);
+    }
     $('#forecast-heading').text('4-Day Forecast');
     weatherInfo.attr('class', 'card-title');
     weatherDiv.append(weatherInfo);

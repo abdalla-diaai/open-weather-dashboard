@@ -6,22 +6,21 @@ body {
     font-family: 'Space Grotesk', sans-serif;
 }
 
+h2 {
+    margin-block-end: 20px !important;
+}
+
 button {
     max-width: 75%;
     margin: 5px;
 }
 
-.card {
-    margin-inline-end: 10px;
+#search-button {
+    margin-block-start: 20px !important;
+}
+
+#main-content {
     padding: 20px;
-}
-
-ul {
-    padding-inline-start: 0;
-}
-
-li {
-    list-style-type: none;
 }
 
 #forecast-cards>.card {
@@ -38,14 +37,15 @@ li {
     background-color: oldlace;
 }
 
-#main-content {
+.card {
+    margin-inline-end: 10px;
     padding: 20px;
 }
 
-h2 {
-    margin-block-end: 20px !important;
+ul {
+    padding-inline-start: 0;
 }
 
-#search-button {
-    margin-block-start: 20px !important;
+li {
+    list-style-type: none;
 }
