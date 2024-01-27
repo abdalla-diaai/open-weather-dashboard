@@ -1,6 +1,8 @@
 var todayDiv = $('#today');
 var forecastDiv = $('#forecast-cards');
+// array for weather condition emojis
 var weatherCondition = ['☀︎', '⛅︎', '☔︎', '❅']
+// general variables for interacting with page
 var temp;
 var wind;
 var humidity;
@@ -18,7 +20,7 @@ var forecastDay;
 // modal function to show warning messages
 
 function openModal() {
-    var modal = document.getElementById("myModal");
+    var modal = $('#myModal');
     modal.style.display = "block";
     $('.close-modal').on('click', function () {
         modal.style.display = "none";
@@ -83,14 +85,14 @@ function createCard(date, dateFormat, wDiv, cityName) {
         displayText = forecastDay.toLocaleDateString();
         weatherDiv.attr('class', 'card col');
     };
-    if (condition === 'Sun') {
+    if (condition === 'Clear') {
         weatherInfo.text(`${displayText} ${weatherCondition[0]}`);
 
     } else if (condition === 'Clouds') {
         weatherInfo.text(`${displayText} ${weatherCondition[1]}`);
     } else if (condition === 'Rain') {
         weatherInfo.text(`${displayText} ${weatherCondition[2]}`);
-    } else {
+    } else if (condition === 'Snow') {
         weatherInfo.text(`${displayText} ${weatherCondition[3]}`);
     }
     $('#forecast-heading').text('4-Day Forecast');
@@ -127,6 +129,7 @@ function processForm(city) {
             wind = data.list[0].wind.speed;
             humidity = data.list[0].main.humidity;
             condition = data.list[0].weather[0].main;
+            console.log(condition);
             createCard('today', dayjs().format('DD/MM/YYYY'), todayDiv, city);
 
             for (var i = 8; i < data.list.length; i += 8) {
@@ -192,13 +195,15 @@ $(document).on('click', '.city', function () {
 
 // clear history and forecast divs
 $('#clear').on('click', function () {
-    $('#history').empty();
     todayDiv.empty();
     forecastDiv.empty();
+    $('#history').empty();
     localStorage.clear();
+    location.reload(true);
 
 });
 
+// to retreive buttons on the page
 renderButtons();
 
 

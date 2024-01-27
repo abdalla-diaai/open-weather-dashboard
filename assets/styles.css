@@ -1,11 +1,3 @@
-body {
-    font-family: 'Nanum Myeongjo', serif;
-    font-family: 'PT Serif', serif;
-    font-family: 'Signika Negative', sans-serif;
-    font-family: 'Source Code Pro', monospace;
-    font-family: 'Space Grotesk', sans-serif;
-}
-
 h2 {
     margin-block-end: 20px !important;
 }
