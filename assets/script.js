@@ -1,5 +1,6 @@
 var todayDiv = $('#today');
-var forecastDiv = $('#forecast');
+var forecastDiv = $('#forecast-cards');
+var weatherCondition = ['☀︎', '⛅︎', '☔︎']
 var temp;
 var wind;
 var humidity;
@@ -10,6 +11,7 @@ var weatherUl;
 var tempLi;
 var windLi;
 var humidityLi;
+var condition;
 var today;
 var forecastDay;
 
@@ -31,7 +33,7 @@ function renderButtons() {
     if (historyArray) {
         for (const [key, value] of Object.entries(historyArray)) {
             var historyBtn = $('<button>');
-            historyBtn.addClass('city');
+            historyBtn.addClass('city btn btn-info');
             historyBtn.attr('data-name', key);
             $('#history').prepend(historyBtn);
             historyBtn.text(value);
@@ -67,19 +69,37 @@ function checkHistory(cityName) {
 
 // function to create cards for the specific day weather
 function createCard(date, dateFormat, wDiv, cityName) {
+    var displayText;
     weatherDiv = $('<div>');
     wDiv.append(weatherDiv);
     weatherInfo = $('<h5>');
     if (date === 'today') {
         weatherDiv.attr('class', 'card');
         today = dateFormat;
-        weatherInfo.text(`${cityName.charAt(0).toUpperCase() + cityName.slice(1)} ${today}`);
+        displayText = `${cityName.charAt(0).toUpperCase() + cityName.slice(1)} ${today}`
+        if (condition === 'Clouds') {
+            weatherInfo.text(`${displayText} ${weatherCondition[1]}`);
+        } else if (condition === 'Rain') {
+            weatherInfo.text(`${displayText} ${weatherCondition[2]}`);
+        } else {
+            weatherInfo.text(`${displayText} ${weatherCondition[0]}`);
+        }
     };
     if (date === 'forecast') {
-        weatherDiv.attr('class', 'card col');
         forecastDay = dateFormat;
-        weatherInfo.text(forecastDay.toLocaleDateString());
+        displayText = forecastDay.toLocaleDateString();
+        if (condition === 'Clouds') {
+            weatherInfo.text(`${displayText} ${weatherCondition[1]}`);
+        } else if (condition === 'Rain') {
+            weatherInfo.text(`${displayText} ${weatherCondition[2]}`);
+        } else {
+            weatherInfo.text(`${displayText} ${weatherCondition[0]}`);
+        }
+        weatherDiv.attr('class', 'card col');
+       
+     
     };
+    $('#forecast-heading').text('4-Day Forecast');
     weatherInfo.attr('class', 'card-title');
     weatherDiv.append(weatherInfo);
     weatherBody = $('<div>');
@@ -103,7 +123,6 @@ function createCard(date, dateFormat, wDiv, cityName) {
 // function to process form and fetch data
 function processForm(city) {
     var queryUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&appid=ba14af29e70b969c97f97a7190344c26`
-    console.log(queryUrl);
     fetch(queryUrl)
         .then(function (response) {
             return response.json();
@@ -113,19 +132,22 @@ function processForm(city) {
             temp = data.list[0].main.temp;
             wind = data.list[0].wind.speed;
             humidity = data.list[0].main.humidity;
-            createCard('today', dayjs().format('DD-MM-YYYY'), todayDiv, city);
+            condition = data.list[0].weather[0].main;
+            createCard('today', dayjs().format('DD/MM/YYYY'), todayDiv, city);
 
             for (var i = 8; i < data.list.length; i += 8) {
                 temp = data.list[i].main.temp;
                 wind = data.list[i].wind.speed;
                 humidity = data.list[i].main.humidity;
+                condition = data.list[i].weather[0].main;
+
 
                 createCard('forecast', new Date(data.list[i].dt_txt), forecastDiv);
             };
             // add city to history
             if (!checkHistory(city)) {
                 var cityBtn = $('<button>');
-                cityBtn.addClass('city');
+                cityBtn.addClass('city btn btn-info');
                 cityBtn.attr('data-name', city);
                 $('#history').prepend(cityBtn);
                 cityBtn.text(city);
@@ -171,7 +193,6 @@ $(document).on('click', '.city', function () {
     todayDiv.empty();
     forecastDiv.empty();
     var city = $(this).attr("data-name");
-    console.log(city);
     processForm(city);
 });
 
