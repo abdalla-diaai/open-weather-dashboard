@@ -1,4 +1,3 @@
-var cityHistory = [];
 var todayDiv = $('#today');
 var forecastDiv = $('#forecast');
 var temp;
@@ -13,6 +12,58 @@ var windLi;
 var humidityLi;
 var today;
 var forecastDay;
+
+// modal function to show warning messages
+
+function openModal() {
+    var modal = document.getElementById("myModal");
+    modal.style.display = "block";
+    $('.close-modal').on('click', function () {
+        modal.style.display = "none";
+    });
+    $('#search-input').val('');
+};
+
+
+// function to render history buttons
+function renderButtons() {
+    var historyArray = JSON.parse(localStorage.getItem('history'));
+    if (historyArray) {
+        for (const [key, value] of Object.entries(historyArray)) {
+            var historyBtn = $('<button>');
+            historyBtn.addClass('city');
+            historyBtn.attr('data-name', key);
+            $('#history').prepend(historyBtn);
+            historyBtn.text(value);
+        };
+    };
+};
+
+// function to save city to local storage
+function saveCity(city) {
+    // to traverse DOM from parent time block to children textarea
+    if (!searchHistory) {
+        var searchHistory = {};
+    };
+    // get stored events if existent
+    storedEvents = JSON.parse(localStorage.getItem('history'));
+    if (storedEvents !== null) {
+        searchHistory = storedEvents;
+    };
+    searchHistory[city] = city;
+    localStorage.setItem('history', JSON.stringify(searchHistory));
+};
+
+// function to check whether the city is in the history to avoid duplicating buttons
+function checkHistory(cityName) {
+    var currentHistory = JSON.parse(localStorage.getItem('history'));
+    if (currentHistory !== null) {
+        if (currentHistory.hasOwnProperty(cityName)) {
+            return true;
+        };
+    };
+    return false;
+};
 
 // function to create cards for the specific day weather
 function createCard(date, dateFormat, wDiv, cityName) {
@@ -49,6 +100,7 @@ function createCard(date, dateFormat, wDiv, cityName) {
     humidityLi.text(`Humidity: ${humidity}%`);
 };
 
+// function to process form and fetch data
 function processForm(city) {
     var queryUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&appid=ba14af29e70b969c97f97a7190344c26`
     console.log(queryUrl);
@@ -70,22 +122,27 @@ function processForm(city) {
 
                 createCard('forecast', new Date(data.list[i].dt_txt), forecastDiv);
             };
-  
             // add city to history
-            if (!cityHistory.includes(city)) {
-                cityHistory.push(city);
+            if (!checkHistory(city)) {
                 var cityBtn = $('<button>');
                 cityBtn.addClass('city');
                 cityBtn.attr('data-name', city);
                 $('#history').prepend(cityBtn);
                 cityBtn.text(city);
+                saveCity(city);
             };
         })
         .catch(error => {
-            alert('Error: city name does not exist!');
+            $('#modal-text').text('City Does not Exist!');
+            $('.modal-title').text('Error');
+            openModal();
         });
+    // clear input field
     $('#search-input').val('');
+
 };
+// event listners -->
+// form event
 $('#search-form').on('submit', function (event) {
     event.preventDefault();
     todayDiv.empty();
@@ -93,17 +150,19 @@ $('#search-form').on('submit', function (event) {
     city = $('#search-input').val();
     // capitalise first letter if lower case and handle uppercase
     city = city.charAt(0).toUpperCase() + city.slice(1).toLowerCase();
-
     // handle empty form and city searched before
-    if (city && !cityHistory.includes(city)) {
+    if (city && !checkHistory(city)) {
         processForm(city);
-    }
-    else if (cityHistory.includes(city)) {
-        alert('City exists in search history!')
-    }
-    else {
-        alert('This field can not be empty!');
-    }
+    } else if (checkHistory(city)) {
+        $('.modal-title').text('Check History');
+
+        $('#modal-text').text('City Exists in History!');
+        openModal();
+    } else {
+        $('.modal-title').text('Error');
+        $('#modal-text').text('Invalid Input!');
+        openModal();
+    };
 });
 
 
@@ -115,4 +174,16 @@ $(document).on('click', '.city', function () {
     console.log(city);
     processForm(city);
 });
+
+// clear history and forecast divs
+$('#clear').on('click', function () {
+    $('#history').empty();
+    todayDiv.empty();
+    forecastDiv.empty();
+    localStorage.clear();
+
+});
+
+renderButtons();
+
 

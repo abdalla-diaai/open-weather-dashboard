@@ -38,7 +38,12 @@
                         </div>
                     </div>
                 </form>
-                <div class="list-group" id="history"></div>
+                <div class="list-group" id="history">
+                </div>
+
+                <div>
+                    <button id="clear" class="btn btn-danger">Clear History</button>
+                </div>
             </aside>
             <div class="col-lg-9 pb-3">
                 <section id="today" class="row mt-3" role="region" aria-live="polite">
@@ -49,7 +54,22 @@
 
 
     </div>
-    </div>
+    <div id="myModal" class="modal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Error</h4>
+              <button type="button" class="btn-close close-modal"  data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <p id="modal-text"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary close-modal" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
     <!-- Bootstrap.js -->
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
